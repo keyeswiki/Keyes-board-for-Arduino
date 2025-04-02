@@ -7,6 +7,9 @@ Keyes UNO R3 是一款基于 Arduino UNO R3 的兼容开发板，广泛应用于
 
 Keyes UNO R3 的核心是 ATmega328P 微控制器，支持 USB 通信和丰富的数字、模拟接口，支持多种通信协议（如 I2C、SPI、UART），适合各种电子项目开发。
 
+**相关资料链接**
+链接: <https://pan.baidu.com/s/1fCL1JTKPIryVw8RBIhd17Q?pwd=KEYE> 提取码: KEYE 
+
 ---
 
 #### **2. 特点**
