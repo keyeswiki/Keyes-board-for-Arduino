@@ -70,27 +70,11 @@ KE0175 Keyes STEM 电子积木编程教育开发板是一款基于 ATmega328P �
 
 注意：
 
-1、请先将开头下载的资料里面的图片复制到SD卡根目录，并且SD卡需要时FAT32格式；
+1、请先将开头下载的资料里面的图片复制到SD卡根目录，并且SD卡需要使用FAT32格式；
 
 2、上传代码时请使用开头下载的资料里面的代码，里面包含了库文件，直接复制下面代码没有库文件会报错。
 
-```cpp
-/***************************************************
-  This is an example sketch for the Adafruit 1.8" TFT shield with joystick
-  ----> http://www.adafruit.com/products/802
-
-  Check out the links above for our tutorials and wiring diagrams
-  These displays use SPI to communicate, 4 pins are required to
-  interface
-  One pin is also needed for the joystick, we use analog 3
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  MIT license, all text above must be included in any redistribution
- ****************************************************/
-
+```c++
 #include "Adafruit_GFX.h"
 #include "Adafruit_ST7735.h"
 #include <SD.h>
@@ -101,14 +85,14 @@ KE0175 Keyes STEM 电子积木编程教育开发板是一款基于 ATmega328P �
     #define F(string_literal) string_literal
 #endif
 
-// TFT display and SD card will share the hardware SPI interface.
-// Hardware SPI pins are specific to the Arduino board type and
-// cannot be remapped to alternate pins.  For Arduino Uno,
-// Duemilanove, etc., pin 11 = MOSI, pin 12 = MISO, pin 13 = SCK.
-#define SD_CS    7  // Chip select line for SD card
-#define TFT_CS  8  // Chip select line for TFT display
-#define TFT_DC   10  // Data/command line for TFT
-#define TFT_RST  9  // Reset line for TFT (or connect to +5V)
+// TFT 显示屏和 SD 卡将共享硬件 SPI 接口。
+// 硬件 SPI 引脚特定于 Arduino 开发板类型，
+// 并且不能重新映射到备用引脚。对于 Arduino Uno、
+// Duemilanove 等，引脚 11 = MOSI，引脚 12 = MISO，引脚 13 = SCK。
+#define SD_CS    7  // SD 卡的片选线
+#define TFT_CS  8  // TFT 显示屏的片选线
+#define TFT_DC   10  // TFT 的数据/命令线
+#define TFT_RST  9  // TFT 的复位线（或连接到 +5V）
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
@@ -117,13 +101,13 @@ int Delay_Timer = 300;
 void setup(void) {
   Serial.begin(9600);
   Pin_Set();
-  // Initialize 1.8" TFT
-  //tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
+  // 初始化 1.8" TFT
+  //tft.initR(INITR_BLACKTAB);   // 初始化 ST7735S 芯片，黑片 (black tab)
   tft.initR();
   
   Serial.println("OK!");
   tft.fillScreen(ST7735_BLACK);
-  tft.setRotation(45);
+  tft.setRotation(0);
   tft.setTextSize(2);
   Serial.print("Initializing SD card...");
   if (!SD.begin(SD_CS))
@@ -146,34 +130,9 @@ void setup(void) {
 }
 
 void loop() 
-{ 
-  Voltage_Test();   //A6/A7测试5V电压
-  delay(3000);
-  Pin_Test();  //流水灯测试
-  delay(1000);
-  
+{  
   Bmp();            //SD卡读取图片测试
   //while (1);
-}
-
-void Voltage_Test()
-{
-  tft.setTextSize(1);
-  String A6_Value = String(analogRead(A6) *5.0 / 1023 * 2.0);
-  String A7_Value = String(analogRead(A7) *5.0 / 1023 * 2.0);
-  Serial.println(String("A6_Value:") + A6_Value + " V");
-  Serial.println(String("A7_Value:") + A7_Value + " V");
-  tft.setTextColor(ST7735_BLACK);
-  tft.setCursor(10, 80);
-  tft.print(String("A6_Value:") + A6_Value + " V");
-  tft.setCursor(10, 100);
-  tft.print(String("A7_Value:") + A7_Value + " V");
-  delay(250);
-  tft.setTextColor(ST7735_WHITE);
-  tft.setCursor(10, 80);
-  tft.print(String("A6_Value:") + A6_Value + " V");
-  tft.setCursor(10, 100);
-  tft.print(String("A7_Value:") + A7_Value + " V");
 }
 
 void Bmp()
@@ -192,53 +151,6 @@ void Bmp()
 //  delay(Delay_Timer);
 //  bmpDraw("girl.bmp", 0, 0);
 //  delay(Delay_Timer);
-}
-
-void Pin_Test()
-{
-  digitalWrite(0,LOW);
-  delay(Delay_Timer);
-  digitalWrite(0,HIGH);
-  digitalWrite(1,LOW);
-  delay(Delay_Timer);
-  digitalWrite(1,HIGH);
-  digitalWrite(2,LOW);
-  delay(Delay_Timer);
-  digitalWrite(2,HIGH);
-  digitalWrite(3,LOW);
-  delay(Delay_Timer);
-  digitalWrite(3,HIGH);
-  digitalWrite(4,LOW);
-  delay(Delay_Timer);
-  digitalWrite(4,HIGH);
-  digitalWrite(5,LOW);
-  delay(Delay_Timer);
-  digitalWrite(5,HIGH);
-  digitalWrite(6,LOW);
-  delay(Delay_Timer);
-  digitalWrite(6,HIGH);
-  digitalWrite(7,LOW);
-  delay(Delay_Timer);
-  digitalWrite(7,HIGH);
-
-  digitalWrite(A0,LOW);
-  delay(Delay_Timer);
-  digitalWrite(A0,HIGH);
-  digitalWrite(A1,LOW);
-  delay(Delay_Timer);
-  digitalWrite(A1,HIGH);
-  digitalWrite(A2,LOW);
-  delay(Delay_Timer);
-  digitalWrite(A2,HIGH);
-  digitalWrite(A3,LOW);
-  delay(Delay_Timer);
-  digitalWrite(A3,HIGH);
-  digitalWrite(A4,LOW);
-  delay(Delay_Timer);
-  digitalWrite(A4,HIGH);
-  digitalWrite(A5,LOW);
-  delay(Delay_Timer);
-  digitalWrite(A5,HIGH);
 }
 
 void Pin_Set()
@@ -262,27 +174,26 @@ void Pin_Set()
   }
 }
 
-// This function opens a Windows Bitmap (BMP) file and
-// displays it at the given coordinates.  It's sped up
-// by reading many pixels worth of data at a time
-// (rather than pixel by pixel).  Increasing the buffer
-// size takes more of the Arduino's precious RAM but
-// makes loading a little faster.  20 pixels seems a
-// good balance.
+// 该函数打开一个 Windows 位图 (BMP) 文件，
+// 并将其显示在给定的坐标处。它通过一次读取
+// 多个像素的数据（而不是逐个像素读取）来提高速度。
+// 增加缓冲区大小会占用更多 Arduino 宝贵的 RAM，
+// 但会使加载速度稍微快一点。20 个像素似乎是
+// 一个很好的平衡点。
 
 #define BUFFPIXEL 20
 
 void bmpDraw(char *filename, uint8_t x, uint8_t y) {
 
   File     bmpFile;
-  int      bmpWidth, bmpHeight;   // W+H in pixels
-  uint8_t  bmpDepth;              // Bit depth (currently must be 24)
-  uint32_t bmpImageoffset;        // Start of image data in file
-  uint32_t rowSize;               // Not always = bmpWidth; may have padding
-  uint8_t  sdbuffer[3*BUFFPIXEL]; // pixel buffer (R+G+B per pixel)
-  uint8_t  buffidx = sizeof(sdbuffer); // Current position in sdbuffer
-  boolean  goodBmp = false;       // Set to true on valid header parse
-  boolean  flip    = true;        // BMP is stored bottom-to-top
+  int      bmpWidth, bmpHeight;   // 像素的宽+高
+  uint8_t  bmpDepth;              // 位深度（目前必须为 24）
+  uint32_t bmpImageoffset;        // 文件中图像数据的起始位置
+  uint32_t rowSize;               // 不一定等于 bmpWidth；可能有填充字节
+  uint8_t  sdbuffer[3*BUFFPIXEL]; // 像素缓冲区（每个像素 R+G+B）
+  uint8_t  buffidx = sizeof(sdbuffer); // sdbuffer 中的当前位置
+  boolean  goodBmp = false;       // 在成功解析有效的头部时设置为 true
+  boolean  flip    = true;        // BMP 存储方式为自下而上
   int      w, h, row, col;
   uint8_t  r, g, b;
   uint32_t pos = 0, startTime = millis();
@@ -294,91 +205,89 @@ void bmpDraw(char *filename, uint8_t x, uint8_t y) {
   Serial.print(filename);
   Serial.println('\'');
 
-  // Open requested file on SD card
+  // 在 SD 卡上打开请求的文件
   if ((bmpFile = SD.open(filename)) == NULL) {
     Serial.print("File not found");
     return;
   }
 
-  // Parse BMP header
-  if(read16(bmpFile) == 0x4D42) { // BMP signature
+  // 解析 BMP 头部
+  if(read16(bmpFile) == 0x4D42) { // BMP 签名 (0x4D42 是 'BM')
     Serial.print("File size: "); Serial.println(read32(bmpFile));
-    (void)read32(bmpFile); // Read & ignore creator bytes
-    bmpImageoffset = read32(bmpFile); // Start of image data
+    (void)read32(bmpFile); // 读取并忽略创建者字节
+    bmpImageoffset = read32(bmpFile); // 图像数据的起始位置
     Serial.print("Image Offset: "); Serial.println(bmpImageoffset, DEC);
-    // Read DIB header
+    // 读取 DIB 头部
     Serial.print("Header size: "); Serial.println(read32(bmpFile));
     bmpWidth  = read32(bmpFile);
     bmpHeight = read32(bmpFile);
-    if(read16(bmpFile) == 1) { // # planes -- must be '1'
-      bmpDepth = read16(bmpFile); // bits per pixel
+    if(read16(bmpFile) == 1) { // 颜色平面数 -- 必须为 '1'
+      bmpDepth = read16(bmpFile); // 每像素位数 (bits per pixel)
       Serial.print("Bit Depth: "); Serial.println(bmpDepth);
-      if((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = uncompressed
+      if((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = 未压缩
 
-        goodBmp = true; // Supported BMP format -- proceed!
+        goodBmp = true; // 支持的 BMP 格式 -- 继续！
         Serial.print("Image size: ");
         Serial.print(bmpWidth);
         Serial.print('x');
         Serial.println(bmpHeight);
 
-        // BMP rows are padded (if needed) to 4-byte boundary
+        // BMP 的行需要填充到 4 字节的边界（如果需要）
         rowSize = (bmpWidth * 3 + 3) & ~3;
 
-        // If bmpHeight is negative, image is in top-down order.
-        // This is not canon but has been observed in the wild.
+        // 如果 bmpHeight 是负数，则图像是自上而下顺序的。
+        // 这不是标准规范，但在实际应用中观察到过这种情况。
         if(bmpHeight < 0) {
           bmpHeight = -bmpHeight;
           flip      = false;
         }
 
-        // Crop area to be loaded
+        // 裁剪需要加载的区域
         w = bmpWidth;
         h = bmpHeight;
         if((x+w-1) >= tft.width())  w = tft.width()  - x;
         if((y+h-1) >= tft.height()) h = tft.height() - y;
 
-        // Set TFT address window to clipped image bounds
+        // 将 TFT 的地址窗口设置为裁剪后的图像边界
         tft.startWrite();
         tft.setAddrWindow(x, y, w, h);
 
-        for (row=0; row<h; row++) { // For each scanline...
+        for (row=0; row<h; row++) { // 对于每条扫描线...
 
-          // Seek to start of scan line.  It might seem labor-
-          // intensive to be doing this on every line, but this
-          // method covers a lot of gritty details like cropping
-          // and scanline padding.  Also, the seek only takes
-          // place if the file position actually needs to change
-          // (avoids a lot of cluster math in SD library).
-          if(flip) // Bitmap is stored bottom-to-top order (normal BMP)
+          // 定位到扫描线的起始位置。在每一行都执行此操作
+          // 似乎很费劲，但这种方法涵盖了裁剪和扫描线填充等
+          // 许多繁琐的细节。此外，只有在文件位置实际需要
+          // 更改时才会执行定位（避免了 SD 库中大量的簇计算）。
+          if(flip) // 位图以自下而上的顺序存储（正常 BMP）
             pos = bmpImageoffset + (bmpHeight - 1 - row) * rowSize;
-          else     // Bitmap is stored top-to-bottom
+          else     // 位图以自上而下的顺序存储
             pos = bmpImageoffset + row * rowSize;
-          if(bmpFile.position() != pos) { // Need seek?
+          if(bmpFile.position() != pos) { // 需要定位吗？
             tft.endWrite();
             bmpFile.seek(pos);
-            buffidx = sizeof(sdbuffer); // Force buffer reload
+            buffidx = sizeof(sdbuffer); // 强制重新加载缓冲区
           }
 
-          for (col=0; col<w; col++) { // For each pixel...
-            // Time to read more pixel data?
-            if (buffidx >= sizeof(sdbuffer)) { // Indeed
+          for (col=0; col<w; col++) { // 对于每个像素...
+            // 需要读取更多像素数据了吗？
+            if (buffidx >= sizeof(sdbuffer)) { // 确实需要
               bmpFile.read(sdbuffer, sizeof(sdbuffer));
-              buffidx = 0; // Set index to beginning
+              buffidx = 0; // 将索引设置回开头
               tft.startWrite();
             }
 
-            // Convert pixel from BMP to TFT format, push to display
+            // 将像素从 BMP 格式转换为 TFT 格式，并推送到显示屏
             b = sdbuffer[buffidx++];
             g = sdbuffer[buffidx++];
             r = sdbuffer[buffidx++];
             tft.pushColor(tft.color565(r,g,b));
-          } // end pixel
-        } // end scanline
+          } // 结束 pixel 循环
+        } // 结束 scanline 循环
         tft.endWrite();
         Serial.print("Loaded in ");
         Serial.print(millis() - startTime);
         Serial.println(" ms");
-      } // end goodBmp
+      } // 结束 goodBmp 判断
     }
   }
 
@@ -386,26 +295,25 @@ void bmpDraw(char *filename, uint8_t x, uint8_t y) {
   if(!goodBmp) Serial.println("BMP format not recognized.");
 }
 
-// These read 16- and 32-bit types from the SD card file.
-// BMP data is stored little-endian, Arduino is little-endian too.
-// May need to reverse subscript order if porting elsewhere.
+// 这些函数从 SD 卡文件中读取 16 位和 32 位类型的数据。
+// BMP 数据以小端模式存储，Arduino 也是小端模式。
+// 如果移植到其他平台，可能需要反转下标顺序。
 
 uint16_t read16(File f) {
   uint16_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read(); // MSB
+  ((uint8_t *)&result)[0] = f.read(); // 最低有效字节 (LSB)
+  ((uint8_t *)&result)[1] = f.read(); // 最高有效字节 (MSB)
   return result;
 }
 
 uint32_t read32(File f) {
   uint32_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
+  ((uint8_t *)&result)[0] = f.read(); // 最低有效字节 (LSB)
   ((uint8_t *)&result)[1] = f.read();
   ((uint8_t *)&result)[2] = f.read();
-  ((uint8_t *)&result)[3] = f.read(); // MSB
+  ((uint8_t *)&result)[3] = f.read(); // 最高有效字节 (MSB)
   return result;
 }
-
 ```
 
 ---
@@ -425,6 +333,8 @@ uint32_t read32(File f) {
 - 在上传代码之前，确保选择正确的板和 COM 口。
 
 - 使用合适的库文件以确保程序正常运行。
+
+- SD卡必须使用FAT32的格式。
 
   
 
